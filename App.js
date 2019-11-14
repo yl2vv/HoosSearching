@@ -8,7 +8,12 @@ import MapScreen from "./components/MapScreen";
 const RootStack = createStackNavigator({
   Login: LoginScreen,
   List: ListScreen,
-  Map: MapScreen
+  Map: {
+    screen: MapScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: `Landmark Details`,
+    }),
+  }
 });
 
 export default createAppContainer(RootStack);
