@@ -99,7 +99,6 @@ const styles = {
     height: 30,
   },
   name: {
-    fontSize: 28,
-    fontFamily: "Helvetica",
+    fontSize: 28
   }
 }
