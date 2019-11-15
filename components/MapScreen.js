@@ -1,6 +1,7 @@
-import * as React from "react";
+import React, {useEffect} from "react";
 import {Button, Image, Text, View, Dimensions, ScrollView} from "react-native";
 import MapView from 'react-native-maps';
+import * as Font from 'expo-font';
 
 const mapInitialRegion = {
   latitude: 38.0362244,
@@ -72,7 +73,6 @@ const styles = {
     margin: 30
   },
   baseText: {
-    fontFamily: "Roboto",
   },
   titleText: {
     fontWeight: "bold",
