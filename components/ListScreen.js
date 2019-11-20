@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {Button, Text, View, FlatList, Image} from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const check = require('../assets/check.png')
 
-function Item({ name, found }) {
+function Item({ name, found, onpress}) { 
   if (found == true) {
-    return (
+    item_obj = (
       <View style={styles.item}>
         <Text style={styles.name}>{name}</Text>
         <Image style={styles.image} source={check}/>
@@ -13,12 +14,18 @@ function Item({ name, found }) {
     );
   }
   else {
-    return (
+    item_obj = (
       <View style={styles.item}>
         <Text style={styles.name}>{name}</Text>
       </View>
     );
   }
+
+  return (
+    <TouchableOpacity onPress={onpress}>
+      { item_obj }
+    </TouchableOpacity>
+  )
 }
 
 
@@ -41,26 +48,17 @@ export default class ListScreen extends React.Component {
       ],
     };
   }
+  onpress = () => this.props.navigation.push('Map')
+
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.top}>
-          <Text style={styles.title}>Landmarks</Text>
-          <Button
-            title="Go to Map"
-            onPress={() => this.props.navigation.push('Map')}
-          />
-          <Button
-            title="Go back"
-            onPress={() => this.props.navigation.goBack()}
-          />
-        </View>
+      <View style={styles.container}>
          <FlatList
-              data={this.state.places}
-              renderItem={({ item }) => <Item name={item.name} found={item.found}/>}
-              keyExtractor={item => item.landmark_id}
-              style={styles.scroll}
-            />
+            data={this.state.places}
+            renderItem={({ item }) => <Item name={item.name} found={item.found} onpress={this.onpress}/>}
+            keyExtractor={item => item.landmark_id}
+            style={styles.scroll}
+          />
 
       </View>
     );
@@ -68,11 +66,10 @@ export default class ListScreen extends React.Component {
 }
 
 const styles = { 
-  top: {
-    flex: 0.1,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: 30,
+  container: { 
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
   },
   title: {
     fontSize: 40,

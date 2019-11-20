@@ -7,7 +7,12 @@ import MapScreen from "./components/MapScreen";
 
 const RootStack = createStackNavigator({
   Login: LoginScreen,
-  List: ListScreen,
+  List: {
+    screen: ListScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: `Landmarks`,
+    }),
+  },
   Map: {
     screen: MapScreen,
     navigationOptions: ({ navigation }) => ({
