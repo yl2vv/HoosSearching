@@ -39,6 +39,7 @@ export default function LoginScreen(props) {
   
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={styles.title}>Happy Hunting!</Text>
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={() => props.navigation.push('List')}>
           <Image style={styles.image} source={iconImage}/>
@@ -62,5 +63,8 @@ const styles = {
     width: Dimensions.get("window").width/2,
     height: Dimensions.get("window").height/2,
     resizeMode: "contain"
+  },
+  title: {
+    fontSize: 30
   }
 }

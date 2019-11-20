@@ -6,7 +6,12 @@ import ListScreen from "./components/ListScreen";
 import MapScreen from "./components/MapScreen";
 
 const RootStack = createStackNavigator({
-  Login: LoginScreen,
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: `Login`,
+    }),
+  },
   List: {
     screen: ListScreen,
     navigationOptions: ({ navigation }) => ({
