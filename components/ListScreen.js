@@ -75,6 +75,9 @@ export default class ListScreen extends React.Component {
         places.push({
           landmark_id: doc.id,
           name: data.titleText,
+          landmarkImage: data.landmarkImage,
+          landmarkCoordinate: data.landmarkCoordinate,
+          descriptionText: data.descriptionText,
           found: false
         });
       });
@@ -88,7 +91,16 @@ export default class ListScreen extends React.Component {
       <View style={styles.container}>
          <FlatList
             data={this.state.places}
-            renderItem={({ item }) => <Item name={item.name} found={item.found} onpress={this.onpress}/>}
+            renderItem={({ item }) => <Item name={item.name} found={item.found} onpress={() =>
+              {
+                this.props.navigation.push('Map', {
+                  landmarkImage: item.landmarkImage,
+                  titleText: item.name,
+                  descriptionText: item.descriptionText,
+                  landmarkCoordinate: item.landmarkCoordinate
+                });
+              }
+            }/>}
             keyExtractor={item => item.landmark_id}
             style={styles.scroll}
           />
