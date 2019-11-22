@@ -1,11 +1,28 @@
 import * as React from 'react';
 import {Button, Text, View, FlatList, Image} from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from 'firebase'
+import '@firebase/firestore';
 
-const iconImage = require('../assets/hoossearching.jpg')
+const firebaseConfig = {
+  apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
+  authDomain: "hoosearching.firebaseapp.com",
+  databaseURL: "https://hoosearching.firebaseio.com",
+  projectId: "hoosearching",
+  storageBucket: "hoosearching.appspot.com",
+  messagingSenderId: "27080950881",
+  appId: "1:27080950881:web:c3b17e9223197fe5ea9620"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+
+const iconImage = require('../assets/hoossearching.jpg');
 
 function Item({ name, found, onpress}) { 
-  if (found == true) {
+  if (found) {
     item_obj = (
       <View style={styles.item}>
         <Text style={styles.namefound}>{name}</Text>
@@ -31,8 +48,8 @@ function Item({ name, found, onpress}) {
 
 export default class ListScreen extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       places: [
         { landmark_id: '0', name: 'Statue of Homer', found: true },
@@ -48,7 +65,23 @@ export default class ListScreen extends React.Component {
       ],
     };
   }
-  onpress = () => this.props.navigation.push('Map')
+
+  componentDidMount() {
+    const dbh = firebase.firestore();
+    let places = [];
+    dbh.collection("landmarks").get().then((querySnapshot) => {
+      querySnapshot.forEach(function (doc) {
+        let data = doc.data();
+        places.push({
+          landmark_id: doc.id,
+          name: data.titleText,
+          found: false
+        });
+      });
+    }).then(() => this.setState({places: places}));
+  }
+
+  onpress = () => this.props.navigation.push('Map');
 
   render() {
     return (
@@ -59,7 +92,6 @@ export default class ListScreen extends React.Component {
             keyExtractor={item => item.landmark_id}
             style={styles.scroll}
           />
-
       </View>
     );
   }
@@ -111,4 +143,4 @@ const styles = {
     fontWeight: 'bold',
     opacity: 0.4,
   }
-}
+};

@@ -13,9 +13,11 @@ const firebaseConfig = {
   appId: "1:27080950881:web:c3b17e9223197fe5ea9620"
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-const iconImage = require('../assets/hoossearching.jpg')
+const iconImage = require('../assets/hoossearching.jpg');
 
 export default function LoginScreen(props) {
   loginWithFacebook = async () => {
@@ -26,16 +28,16 @@ export default function LoginScreen(props) {
     if (type === 'success') {
       const credential = firebase.auth.FacebookAuthProvider.credential(token);
       firebase.auth().signInWithCredential(credential).then(() => {
-        props.navigation.push('List')
+        props.navigation.push('List');
       }).catch((error) => {
-        props.navigation.push('List')
-        console.log(error)
+        props.navigation.push('List');
+        console.log(error);
       });
     } else {
-      props.navigation.push('List')
-      console.log("Unsucessful facebook login.")
+      props.navigation.push('List');
+      console.log("Unsuccessful facebook login.");
     }
-  }
+  };
   
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -53,7 +55,7 @@ export default function LoginScreen(props) {
       </View>
     </View>
   );
-}
+};
 
 const styles = {
   loginButton: {
@@ -69,4 +71,4 @@ const styles = {
     color: "#6495ed",
     fontWeight: 'bold',
   }
-}
+};
