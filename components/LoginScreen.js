@@ -43,9 +43,7 @@ export default function LoginScreen(props) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={styles.title}>Happy Hunting!</Text>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={() => props.navigation.push('List')}>
-          <Image style={styles.image} source={iconImage}/>
-        </TouchableOpacity>
+        <Image style={styles.image} source={iconImage}/>
       </View>
       <View style={styles.loginButton}>
         <Button
