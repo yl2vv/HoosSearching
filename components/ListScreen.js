@@ -2,14 +2,14 @@ import * as React from 'react';
 import {Button, Text, View, FlatList, Image} from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const check = require('../assets/check.png')
+const iconImage = require('../assets/hoossearching.jpg')
 
 function Item({ name, found, onpress}) { 
   if (found == true) {
     item_obj = (
       <View style={styles.item}>
-        <Text style={styles.name}>{name}</Text>
-        <Image style={styles.image} source={check}/>
+        <Text style={styles.namefound}>{name}</Text>
+        <Image style={styles.image} source={iconImage}/>
       </View>
     );
   }
@@ -72,30 +72,43 @@ const styles = {
     justifyContent: 'center' 
   },
   title: {
-    fontSize: 40,
+    fontSize: 45,
+    color: "#6495ed",
     fontWeight: 'bold',
+    width: "85%",
+    alignItems: "center",
+    paddingTop: 3,
   },
   scroll: {
-    flex: 0.2,
-    width: "100%",
+    flex: 1,
+    width: "80%",
+    border: 20,
   },
   item: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 80,
-    borderBottomColor: 'black',
-    borderTopColor: 'black',
-    borderTopWidth: 1,
+    height: 70,
+    borderBottomColor: 'orange',
     borderBottomWidth: 1,
-    paddingLeft: 20,
-    paddingRight: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
+    border: 50,
   },
   image: {
     width: 30,
     height: 30,
+    opacity: 0.5
   },
   name: {
-    fontSize: 28
+    fontSize: 28,
+    color: "#6495ed",
+    fontWeight: 'bold',
+  },
+  namefound: {
+    fontSize: 28,
+    color: "#6495ed",
+    fontWeight: 'bold',
+    opacity: 0.4,
   }
 }

@@ -65,6 +65,8 @@ const styles = {
     resizeMode: "contain"
   },
   title: {
-    fontSize: 30
+    fontSize: 30,
+    color: "#6495ed",
+    fontWeight: 'bold',
   }
 }
