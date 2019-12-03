@@ -28,6 +28,14 @@ export default class MapScreen extends React.Component {
       landmarkImage = require('../assets/homer.jpg')
     } else if (landmarkImage === '../assets/newcomb.jpg') {
       landmarkImage = require('../assets/newcomb.jpg')
+    } else if (landmarkImage === '../assets/afc.jpg') {
+      landmarkImage = require('../assets/afc.jpg')
+    } else if (landmarkImage === '../assets/poe.jpg') {
+      landmarkImage = require('../assets/poe.jpg')
+    } else if (landmarkImage === '../assets/rotunda.jpg') {
+      landmarkImage = require('../assets/rotunda.jpg')
+    } else if (landmarkImage === '../assets/bodos.jpg') {
+      landmarkImage = require('../assets/bodos.jpg')
     }
     titleText = this.props.navigation.getParam('titleText');
     descriptionText = this.props.navigation.getParam('descriptionText');
