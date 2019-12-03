@@ -174,7 +174,6 @@ const styles = {
   temp: {
     fontSize: 16,
     color: "#6495ed",
-    fontWeight: 'bold',
   },
   name: {
     fontSize: 28,
