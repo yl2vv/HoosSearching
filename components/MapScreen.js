@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Button, Image, Text, View, Dimensions, ScrollView} from "react-native";
 import MapView from 'react-native-maps';
 
-const mapInitialRegion = {
+let mapInitialRegion = {
   latitude: 38.0362244,
   longitude: -78.5092874,
   latitudeDelta: 0.01,
@@ -40,6 +40,9 @@ export default class MapScreen extends React.Component {
     titleText = this.props.navigation.getParam('titleText');
     descriptionText = this.props.navigation.getParam('descriptionText');
     landmarkCoordinate = this.props.navigation.getParam('landmarkCoordinate');
+    landmarkCoordinate['latitudeDelta']= .01;
+    landmarkCoordinate['longitudeDelta']= .01;
+    mapInitialRegion = landmarkCoordinate;
   }
 
   render() {

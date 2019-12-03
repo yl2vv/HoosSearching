@@ -14,9 +14,13 @@ const firebaseConfig = {
   appId: "1:27080950881:web:c3b17e9223197fe5ea9620"
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+state = {
+  weather: "",
+  temp: "",
 }
+const zipcode = "22903"
+const key = "e319d542e4461aab593eb5fc61ad740a"
+web_url = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipcode + ",us&units=imperial&appid=" +  key
 
 
 const iconImage = require('../assets/hoossearching.jpg');
@@ -87,6 +91,14 @@ export default class ListScreen extends React.Component {
         })
         this.setState({places: places});
       });
+    fetch(web_url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      this.setState({ 
+        temp: responseJson.main.temp,
+        weather: responseJson.weather[0].description,
+      });
+    })
   }
 
   get_found_landmarks = async () => {
@@ -124,6 +136,10 @@ export default class ListScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.top}>
+          <Text style={styles.temp}>{this.state.temp}° F</Text> 
+          <Text style={styles.temp}>{this.state.weather}</Text>
+        </View>
          <FlatList
             data={this.state.places}
             renderItem={({ item }) => <Item name={item.name} found={item.found} onpress={() =>
@@ -148,7 +164,8 @@ const styles = {
   container: { 
     flex: 1, 
     alignItems: 'center', 
-    justifyContent: 'center' 
+    justifyContent: 'center',
+    backgroundColor: "#f0ffff"
   },
   title: {
     fontSize: 45,
@@ -161,6 +178,7 @@ const styles = {
   scroll: {
     flex: 1,
     width: "80%",
+    height: "50%",
     border: 20,
   },
   item: {
@@ -178,6 +196,18 @@ const styles = {
     width: 30,
     height: 30,
     opacity: 0.5
+  },
+  top: {
+    width: "100%",
+    paddingTop: 10,
+    flexDirection: "column",
+    paddingRight: 15,
+    alignItems: "flex-end",
+    height: "5%"
+  },
+  temp: {
+    fontSize: 16,
+    color: "#6495ed",
   },
   name: {
     fontSize: 28,
