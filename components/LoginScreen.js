@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button, Text, View, Alert, Dimensions, Image, TouchableOpacity} from "react-native";
 import * as firebase from 'firebase';
 import * as Facebook from 'expo-facebook';
-
+import { AsyncStorage } from 'react-native';
 const firebaseConfig = {
   apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
   authDomain: "hoosearching.firebaseapp.com",
@@ -21,22 +21,44 @@ const iconImage = require('../assets/hoossearching.jpg');
 
 export default function LoginScreen(props) {
   loginWithFacebook = async () => {
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-      '2392251221088863',
-      { permissions: ['public_profile'] }
-    );
-    if (type === 'success') {
-      const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      firebase.auth().signInWithCredential(credential).then(() => {
-        props.navigation.push('List');
-      }).catch((error) => {
-        props.navigation.push('List');
-        console.log(error);
-      });
+    if (firebase.auth().currentUser === null) {
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+        '2392251221088863',
+        { permissions: ['public_profile'] }
+      );
+      if (type === 'success') {
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        firebase.auth().signInWithCredential(credential).then((result) => {
+          return verifyCreateUser()
+        }).catch((error) => {
+          Alert.alert("Unsuccessful facebook login.");
+        });
+      } else {
+        Alert.alert("Unsuccessful facebook login.");
+      }
     } else {
-      props.navigation.push('List');
-      console.log("Unsuccessful facebook login.");
+      verifyCreateUser()
     }
+  };
+  
+  verifyCreateUser = async () => {
+    console.log("initalize account")
+    dbh = firebase.firestore();
+    userId = firebase.auth().currentUser.uid;
+    usersRef = dbh.collection('users');
+    return usersRef.doc(userId).get()
+      .then(doc => {
+        return doc.data()
+      })
+      .then(doc_data => {
+        if (!doc_data) {
+          return usersRef.doc(userId).set({
+            landmarks_found: []
+          })
+        }
+      }).then(() => {
+        props.navigation.push('List');
+      })
   };
   
   return (

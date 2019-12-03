@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, Text, View, FlatList, Image} from "react-native";
+import {Button, Text, View, Alert, FlatList, Image} from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from 'firebase'
 import '@firebase/firestore';
@@ -51,40 +51,75 @@ export default class ListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      places: [
-        { landmark_id: '0', name: 'Statue of Homer', found: true },
-        { landmark_id: '1', name: 'Newcomb Hall', found: false },
-        { landmark_id: '2', name: 'Bodos', found: true },
-        { landmark_id: '3', name: 'Clark Library', found: false },
-        { landmark_id: '4', name: 'Ohill', found: false },
-        { landmark_id: '5', name: 'AFC', found: false },
-        { landmark_id: '6', name: 'Gooch Dillard', found: false },
-        { landmark_id: '7', name: 'John Paul Jones', found: true },
-        { landmark_id: '8', name: 'Old Dorms', found: true },
-        { landmark_id: '9', name: 'New Dorms', found: false },
-      ],
+      places: [],
     };
   }
 
   componentDidMount() {
     const dbh = firebase.firestore();
     let places = [];
-    dbh.collection("landmarks").get().then((querySnapshot) => {
-      querySnapshot.forEach(function (doc) {
-        let data = doc.data();
-        places.push({
-          landmark_id: doc.id,
-          name: data.titleText,
-          landmarkImage: data.landmarkImage,
-          landmarkCoordinate: data.landmarkCoordinate,
-          descriptionText: data.descriptionText,
-          found: false
-        });
+    userId = firebase.auth().currentUser.uid;
+    let usersRef = dbh.collection('users');
+    dbh.collection("landmarks").get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach(function (doc) {
+          let data = doc.data();
+          places.push({
+            landmark_id: doc.id,
+            name: data.titleText,
+            landmarkImage: data.landmarkImage,
+            landmarkCoordinate: data.landmarkCoordinate,
+            descriptionText: data.descriptionText,
+            found: false
+            });
+          });
+        })
+      .then(() => {
+        return this.get_found_landmarks()
+      })
+      .then((found_places) => {
+        console.log("setting state");
+        places = places.map((el) => {
+          if (found_places.includes(el.landmark_id)) {
+            el.found = true
+          }
+          return el
+        })
+        this.setState({places: places});
       });
-    }).then(() => this.setState({places: places}));
   }
 
-  onpress = () => this.props.navigation.push('Map');
+  get_found_landmarks = async () => {
+    user_data = usersRef.doc(userId).get()
+      .then(doc => {
+        return doc.data()
+      })
+      .then((user_data) => {
+        if (user_data) {
+          console.log("Got user data!")
+          return user_data
+        } else {
+          console.log(user_data)
+          Alert.alert("Failed to get user data.")
+          this.props.navigation.push('Login');
+        };
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+    
+    return user_data.then((user_data) => {
+      found_promises = []
+      user_data.landmarks_found.forEach((doc) => {
+        found_promises.push(        
+          doc.get().then((docu) => {
+            return docu.id
+          })
+        )
+      })
+      return Promise.all(found_promises)
+    })
+  }
 
   render() {
     return (
