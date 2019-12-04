@@ -78,9 +78,7 @@ export default class ListScreen extends React.Component {
   };
 
   load_data = async () => {
-    userId = firebase.auth().currentUser.uid;
-    let usersRef = dbh.collection('users');
-    places = [];
+    let places = [];
     dbh.collection("landmarks_auto").get()
       .then((querySnapshot) => {
         querySnapshot.forEach(function (doc) {
@@ -94,68 +92,70 @@ export default class ListScreen extends React.Component {
             found: false
             });
           });
+        this.setState({places: places});
         })
       .then(() => {
         return this.get_found_landmarks()
       })
       .then((found_places) => {
-        console.log("setting state");
-        places = places.map((el) => {
-          if (found_places.includes(el.landmark_id)) {
+        let places = this.state.places.map((el) => {
+          if (found_places.includes(el.name)) {
             el.found = true
           }
           return el
-        })
+        });
         this.setState({places: places});
       });
-    fetch(web_url)
-      .then((response) => response.json())
-      .then((responseJson) => {
-      this.setState({ 
-        temp: responseJson.main.temp,
-        weather: responseJson.weather[0].description,
-      });
-    })
   }
 
   componentDidMount() {
-    const dbh = firebase.firestore();
-    this.verifyCreateUser().then(() => {
-      this.load_data();
-    });
+    // this.verifyCreateUser().then(() => {
+    //   this.load_data();
+    // });
+    this.props.navigation.addListener(
+      'willFocus',
+      async () => {
+        this.verifyCreateUser().then(() => {
+          this.load_data();
+        });
+      }
+    );
+    fetch("http://google.com/")
+    .then((response) => response)
+    .then((responseJson) => {
+      console.log("setting temp!")
+      this.setState({ 
+        temp: 90,
+        weather: "hot!",
+      });
+    })
+    // fetch(web_url)
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     this.setState({ 
+    //       temp: responseJson.main.temp,
+    //       weather: responseJson.weather[0].description,
+    //     });
+    // })
   }
 
   get_found_landmarks = async () => {
-    user_data = usersRef.doc(userId).get()
+    return usersRef.doc(userId).get()
       .then(doc => {
         return doc.data()
       })
       .then((user_data) => {
         if (user_data) {
-          console.log("Got user data!")
-          return user_data
+          return user_data.landmarks_found;
         } else {
-          console.log(user_data)
           Alert.alert("Failed to get user data.")
           this.props.navigation.push('Login');
-        };
+        }
       })
       .catch(err => {
         console.log('Error getting documents', err);
       });
-    
-    return user_data.then((user_data) => {
-      found_promises = []
-      user_data.landmarks_found.forEach((doc) => {
-        found_promises.push(        
-          doc.get().then((docu) => {
-            return docu.id
-          })
-        )
-      })
-      return Promise.all(found_promises)
-    })
-  }
+  };
 
   render() {
     return (
