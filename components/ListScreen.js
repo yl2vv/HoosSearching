@@ -51,7 +51,6 @@ export default class ListScreen extends React.Component {
   }
     
   verifyCreateUser = async () => {
-    console.log("initalize account")
     dbh = firebase.firestore();
     userId = firebase.auth().currentUser.uid;
     usersRef = dbh.collection('users');
@@ -85,7 +84,9 @@ export default class ListScreen extends React.Component {
                 found: found_places.includes(data.titleText)
               });
             });
-            this.setState({places: places});
+            this.setState({
+              places: places,
+            });
           })
       })
   };
@@ -132,6 +133,10 @@ export default class ListScreen extends React.Component {
       })
       .then((user_data) => {
         if (user_data) {
+          console.log(firebase.auth().currentUser.displayName)
+          this.setState({
+            user: user_data
+          });
           return user_data.landmarks_found;
         } else {
           Alert.alert("Failed to get user data.")
@@ -146,9 +151,12 @@ export default class ListScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.top}>
-          <Text style={styles.temp}>{this.state.temp}° F</Text> 
-          <Text style={styles.temp}>{this.state.weather}</Text>
+        <View style={{flexDirection: "row", paddingLeft: 90, paddingRight: 80}}>
+          <Text>Logged in as {firebase.auth().currentUser.displayName}</Text>
+          <View style={styles.top}>
+            <Text style={styles.temp}>{this.state.temp}° F</Text>
+            <Text style={styles.temp}>{this.state.weather}</Text>
+          </View>
         </View>
          <FlatList
             data={this.state.places}
