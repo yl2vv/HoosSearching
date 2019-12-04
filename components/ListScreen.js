@@ -158,7 +158,8 @@ export default class ListScreen extends React.Component {
                   landmarkImage: item.landmarkImage,
                   titleText: item.name,
                   descriptionText: item.descriptionText,
-                  landmarkCoordinate: item.landmarkCoordinate
+                  landmarkCoordinate: item.landmarkCoordinate,
+                  found: item.found
                 });
               }
             }/>}

@@ -12,7 +12,6 @@ export default class MapScreen extends React.Component {
     this.landmarkImage = {
       uri: root + image_name,
     };
-
     this.titleText = props.navigation.getParam('titleText');
     this.descriptionText = props.navigation.getParam('descriptionText');
     let coord = {...props.navigation.getParam('landmarkCoordinate')};
@@ -22,6 +21,9 @@ export default class MapScreen extends React.Component {
       latitudeDelta: .01,
       longitudeDelta: .01
     };
+    this.state = {
+      buttonText: "Mark found"
+    }
   }
 
   distance = (lat1, lon1, lat2, lon2) => {
@@ -71,35 +73,44 @@ export default class MapScreen extends React.Component {
           </View>
           <View style={styles.markFound}>
             <Button
-              title="Mark found"
+              color={this.props.navigation.getParam("found") ? "dimgray" : undefined}
+              title={this.props.navigation.getParam("found") ? "Already found" : "Mark found"}
               onPress={() => {
-                navigator.geolocation.getCurrentPosition((position) => {
-                  let lat = position.coords.latitude;
-                  let long = position.coords.longitude;
-                  let distance = this.distance(lat, long, this.landmarkCoordinate.latitude, this.landmarkCoordinate.longitude);
-                  // within 100ft
-                  if (distance > 0.02) {
-                    Alert.alert(
-                      'Landmark Too Far',
-                      'Please move closer to landmark.'
-                    );
-                  } else {
-                    Alert.alert(
-                      'Landmark Found',
-                      'Congratulations on your nice find.'
-                    );
-                    let userId = firebase.auth().currentUser.uid;
-                    let userData =  dbh.collection("users").doc(userId);
-                    userData.get().then((querySnapshot) => {
-                      let landmarks_found = querySnapshot.data().landmarks_found;
-                      landmarks_found.push(this.titleText);
-                      userData.update({
-                        landmarks_found: landmarks_found
+                if (this.props.navigation.getParam("found")) {
+                  Alert.alert(
+                    'Landmark Already Found',
+                    'Go look for some new landmarks!'
+                  );
+                  this.props.navigation.goBack();
+                } else {
+                  navigator.geolocation.getCurrentPosition((position) => {
+                    let lat = position.coords.latitude;
+                    let long = position.coords.longitude;
+                    let distance = this.distance(lat, long, this.landmarkCoordinate.latitude, this.landmarkCoordinate.longitude);
+                    // within 100ft
+                    if (distance > 0.02) {
+                      Alert.alert(
+                        'Landmark Too Far',
+                        'Please move closer to landmark.'
+                      );
+                    } else {
+                      Alert.alert(
+                        'Landmark Found',
+                        'Congratulations on your nice find!'
+                      );
+                      let userId = firebase.auth().currentUser.uid;
+                      let userData =  dbh.collection("users").doc(userId);
+                      userData.get().then((querySnapshot) => {
+                        let landmarks_found = querySnapshot.data().landmarks_found;
+                        landmarks_found.push(this.titleText);
+                        userData.update({
+                          landmarks_found: landmarks_found
+                        });
                       });
-                    });
-                    this.props.navigation.goBack();
-                  }
-                });
+                      this.props.navigation.goBack();
+                    }
+                  });
+                }
               }}
             />
           </View>
