@@ -106,23 +106,6 @@ export default class ListScreen extends React.Component {
         });
         this.setState({places: places});
       });
-    fetch("http://google.com/")
-      .then((response) => response)
-      .then((responseJson) => {
-        console.log("setting temp!")
-        this.setState({ 
-          temp: 90,
-          weather: "hot!",
-        });
-    })
-    // fetch(web_url)
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //     this.setState({ 
-    //       temp: responseJson.main.temp,
-    //       weather: responseJson.weather[0].description,
-    //     });
-    // })
   }
 
   componentDidMount() {
@@ -137,6 +120,23 @@ export default class ListScreen extends React.Component {
         });
       }
     );
+    fetch("http://google.com/")
+    .then((response) => response)
+    .then((responseJson) => {
+      console.log("setting temp!")
+      this.setState({ 
+        temp: 90,
+        weather: "hot!",
+      });
+    })
+    // fetch(web_url)
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     this.setState({ 
+    //       temp: responseJson.main.temp,
+    //       weather: responseJson.weather[0].description,
+    //     });
+    // })
   }
 
   get_found_landmarks = async () => {
