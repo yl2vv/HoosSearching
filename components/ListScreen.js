@@ -227,7 +227,6 @@ const styles = {
     flexDirection: "column",
     paddingRight: 15,
     alignItems: "flex-end",
-    height: "5%"
   },
   temp: {
     fontSize: 16,

@@ -41,10 +41,14 @@ export default function LoginScreen(props) {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={styles.title}>Happy Hunting!</Text>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={iconImage}/>
+    <View style={styles.cont}>
+      <View style={styles.logo}>
+        <View style={styles.words}>
+          <Text style={styles.title}>Happy Hunting!</Text>
+        </View>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={iconImage}/>
+        </View>
       </View>
       <View style={styles.loginButton}>
         <Button
@@ -57,13 +61,38 @@ export default function LoginScreen(props) {
 };
 
 const styles = {
+  cont: {
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: 'center', 
+    flexWrap: 'wrap',
+  },
+  logo: {
+    height: "70%",
+    alignItems: "center",
+  },
   loginButton: {
-    width: Dimensions.get("window").width
+    width: 300,
+    height: 70,
+    justifyContent: "center",
+    top: "15%",
+    alignItems: "center"
+
+  },
+  imageContainer: {
+    height: "60%",
+    justifyContent: "center",
+    paddingTop: 20,
   },
   image: {
-    width: Dimensions.get("window").width/2,
-    height: Dimensions.get("window").height/2,
-    resizeMode: "contain"
+    width: 200,
+    height: 200,
+    justifyContent: "center"
+  },
+  words: {
+    height: "40%",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   title: {
     fontSize: 30,
