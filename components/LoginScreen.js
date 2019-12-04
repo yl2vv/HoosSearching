@@ -2,7 +2,6 @@ import * as React from "react";
 import {Button, Text, View, Alert, Dimensions, Image, TouchableOpacity} from "react-native";
 import * as firebase from 'firebase';
 import * as Facebook from 'expo-facebook';
-import { AsyncStorage } from 'react-native';
 const firebaseConfig = {
   apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
   authDomain: "hoosearching.firebaseapp.com",
@@ -29,7 +28,7 @@ export default function LoginScreen(props) {
       if (type === 'success') {
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase.auth().signInWithCredential(credential).then((result) => {
-          return verifyCreateUser()
+          props.navigation.push('List');
         }).catch((error) => {
           Alert.alert("Unsuccessful facebook login.");
         });
@@ -37,30 +36,10 @@ export default function LoginScreen(props) {
         Alert.alert("Unsuccessful facebook login.");
       }
     } else {
-      verifyCreateUser()
+      props.navigation.push('List');
     }
   };
-  
-  verifyCreateUser = async () => {
-    console.log("initalize account")
-    dbh = firebase.firestore();
-    userId = firebase.auth().currentUser.uid;
-    usersRef = dbh.collection('users');
-    return usersRef.doc(userId).get()
-      .then(doc => {
-        return doc.data()
-      })
-      .then(doc_data => {
-        if (!doc_data) {
-          return usersRef.doc(userId).set({
-            landmarks_found: []
-          })
-        }
-      }).then(() => {
-        props.navigation.push('List');
-      })
-  };
-  
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={styles.title}>Happy Hunting!</Text>

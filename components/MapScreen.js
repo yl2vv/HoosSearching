@@ -2,84 +2,63 @@ import React, {useEffect} from "react";
 import {Button, Image, Text, View, Dimensions, ScrollView} from "react-native";
 import MapView from 'react-native-maps';
 
-let mapInitialRegion = {
-  latitude: 38.0362244,
-  longitude: -78.5092874,
-  latitudeDelta: 0.01,
-  longitudeDelta: 0.01,
-};
-
-let landmarkCoordinate = {
-  latitude: 38.0332459,
-  longitude: -78.5046905,
-};
-
-let landmarkImage = '../assets/homer.jpg';
-
-let titleText = "Statue of Homer";
-
-let descriptionText = "Blind Homer With His Student Guide is a bronze sculpture by Moses Jacob Ezekiel in the likeness of the blind poet Homer, author of the Iliad, accompanied by a student guide. Ezekiel completed the statue in 1907 on a commission from John Woodruff Simpson as a gift for Amherst College, his alma mater. For reasons unknown the gift was refused, and Thomas Nelson Page, a Virginia alumnus who was active in the UVA Alumni Association, stepped in to secure the gift of the statue to UVa instead. Ezekiel completed the work in his Rome studio and donated a five foot tall black marble pedestal upon which the statue was originally installed. The statue is installed on The Lawn, in the grass to the north of Old Cabell Hall.";
-
-export default class MapScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    landmarkImage = this.props.navigation.getParam('landmarkImage');
-    if (landmarkImage === '../assets/homer.jpg') {
-      landmarkImage = require('../assets/homer.jpg')
-    } else if (landmarkImage === '../assets/newcomb.jpg') {
-      landmarkImage = require('../assets/newcomb.jpg')
-    } else if (landmarkImage === '../assets/afc.jpg') {
-      landmarkImage = require('../assets/afc.jpg')
-    } else if (landmarkImage === '../assets/poe.jpg') {
-      landmarkImage = require('../assets/poe.jpg')
-    } else if (landmarkImage === '../assets/rotunda.jpg') {
-      landmarkImage = require('../assets/rotunda.jpg')
-    } else if (landmarkImage === '../assets/bodos.jpg') {
-      landmarkImage = require('../assets/bodos.jpg')
-    }
-    titleText = this.props.navigation.getParam('titleText');
-    descriptionText = this.props.navigation.getParam('descriptionText');
-    landmarkCoordinate = this.props.navigation.getParam('landmarkCoordinate');
-    landmarkCoordinate['latitudeDelta']= .01;
-    landmarkCoordinate['longitudeDelta']= .01;
-    mapInitialRegion = landmarkCoordinate;
+export default function MapScreen(props) {
+  landmarkImage = props.navigation.getParam('landmarkImage');
+  if (landmarkImage === '../assets/homer.jpg') {
+    landmarkImage = require('../assets/homer.jpg')
+  } else if (landmarkImage === '../assets/newcomb.jpg') {
+    landmarkImage = require('../assets/newcomb.jpg')
+  } else if (landmarkImage === '../assets/afc.jpg') {
+    landmarkImage = require('../assets/afc.jpg')
+  } else if (landmarkImage === '../assets/poe.jpg') {
+    landmarkImage = require('../assets/poe.jpg')
+  } else if (landmarkImage === '../assets/rotunda.jpg') {
+    landmarkImage = require('../assets/rotunda.jpg')
+  } else if (landmarkImage === '../assets/bodos.jpg') {
+    landmarkImage = require('../assets/bodos.jpg')
   }
-
-  render() {
-    return (
-      <View>
-        <ScrollView contentContainerStyle={{alignItems: "center"}}>
-          <Image style={styles.image} source={landmarkImage}/>
-          <MapView
-            style={styles.mapStyle}
-            initialRegion={mapInitialRegion}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-          >
-            <MapView.Marker
-              coordinate={landmarkCoordinate}
-            />
-          </MapView>
-          <View style={styles.baseText}>
-            <Text style={styles.titleText}>
-              {titleText}
-            </Text>
-            <Text style={styles.descriptionText}>
-              {descriptionText}
-            </Text>
-          </View>
-          <View style={styles.markFound}>
-            <Button
-              title="Mark found"
-              onPress={() => props.navigation.goBack()}
-            />
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
-
-
+  titleText = props.navigation.getParam('titleText');
+  descriptionText = props.navigation.getParam('descriptionText');
+  let coord = {...props.navigation.getParam('landmarkCoordinate')};
+  landmarkCoordinate = {
+    latitude: coord['_lat'],
+    longitude: coord['_long'],
+    latitudeDelta: .01,
+    longitudeDelta: .01
+  };
+  mapInitialRegion = landmarkCoordinate;
+  
+  return (
+    <View>
+      <ScrollView contentContainerStyle={{alignItems: "center"}}>
+        <Image style={styles.image} source={landmarkImage}/>
+        <MapView
+          style={styles.mapStyle}
+          initialRegion={mapInitialRegion}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+        >
+          <MapView.Marker
+            coordinate={landmarkCoordinate}
+          />
+        </MapView>
+        <View style={styles.baseText}>
+          <Text style={styles.titleText}>
+            {titleText}
+          </Text>
+          <Text style={styles.descriptionText}>
+            {descriptionText}
+          </Text>
+        </View>
+        <View style={styles.markFound}>
+          <Button
+            title="Mark found"
+            onPress={() => props.navigation.goBack()}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = {

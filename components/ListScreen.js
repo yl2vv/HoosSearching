@@ -51,19 +51,36 @@ function Item({ name, found, onpress}) {
 
 
 export default class ListScreen extends React.Component {
-
+  
   constructor(props) {
     super(props);
     this.state = {
       places: [],
     };
   }
+    
+  verifyCreateUser = async () => {
+    console.log("initalize account")
+    dbh = firebase.firestore();
+    userId = firebase.auth().currentUser.uid;
+    usersRef = dbh.collection('users');
+    return usersRef.doc(userId).get()
+      .then(doc => {
+        return doc.data()
+      })
+      .then(doc_data => {
+        if (!doc_data) {
+          return usersRef.doc(userId).set({
+            landmarks_found: []
+          })
+        }
+      })
+  };
 
-  componentDidMount() {
-    const dbh = firebase.firestore();
-    let places = [];
+  load_data = async () => {
     userId = firebase.auth().currentUser.uid;
     let usersRef = dbh.collection('users');
+    places = [];
     dbh.collection("landmarks").get()
       .then((querySnapshot) => {
         querySnapshot.forEach(function (doc) {
@@ -99,6 +116,13 @@ export default class ListScreen extends React.Component {
         weather: responseJson.weather[0].description,
       });
     })
+  }
+
+  componentDidMount() {
+    const dbh = firebase.firestore();
+    this.verifyCreateUser().then(() => {
+      this.load_data();
+    });
   }
 
   get_found_landmarks = async () => {
