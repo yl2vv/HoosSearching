@@ -79,39 +79,27 @@ export default class ListScreen extends React.Component {
 
   load_data = async () => {
     let places = [];
-    dbh.collection("landmarks_auto").get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach(function (doc) {
-          let data = doc.data();
-          places.push({
-            landmark_id: doc.id,
-            name: data.titleText,
-            landmarkImage: data.landmarkImage,
-            landmarkCoordinate: data.landmarkCoordinate,
-            descriptionText: data.descriptionText,
-            found: false
-            });
-          });
-        this.setState({places: places});
-        })
-      .then(() => {
-        return this.get_found_landmarks()
-      })
+    this.get_found_landmarks()
       .then((found_places) => {
-        let places = this.state.places.map((el) => {
-          if (found_places.includes(el.name)) {
-            el.found = true
-          }
-          return el
-        });
-        this.setState({places: places});
-      });
-  }
+        dbh.collection("landmarks_auto").get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach(function (doc) {
+              let data = doc.data();
+              places.push({
+                landmark_id: doc.id,
+                name: data.titleText,
+                landmarkImage: data.landmarkImage,
+                landmarkCoordinate: data.landmarkCoordinate,
+                descriptionText: data.descriptionText,
+                found: found_places.includes(data.titleText)
+              });
+            });
+            this.setState({places: places});
+          })
+      })
+  };
 
   componentDidMount() {
-    // this.verifyCreateUser().then(() => {
-    //   this.load_data();
-    // });
     this.props.navigation.addListener(
       'willFocus',
       async () => {
