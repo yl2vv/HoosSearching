@@ -81,7 +81,7 @@ export default class ListScreen extends React.Component {
     userId = firebase.auth().currentUser.uid;
     let usersRef = dbh.collection('users');
     places = [];
-    dbh.collection("landmarks").get()
+    dbh.collection("landmarks_auto").get()
       .then((querySnapshot) => {
         querySnapshot.forEach(function (doc) {
           let data = doc.data();

@@ -3,20 +3,13 @@ import {Button, Image, Text, View, Dimensions, ScrollView} from "react-native";
 import MapView from 'react-native-maps';
 
 export default function MapScreen(props) {
-  landmarkImage = props.navigation.getParam('landmarkImage');
-  if (landmarkImage === '../assets/homer.jpg') {
-    landmarkImage = require('../assets/homer.jpg')
-  } else if (landmarkImage === '../assets/newcomb.jpg') {
-    landmarkImage = require('../assets/newcomb.jpg')
-  } else if (landmarkImage === '../assets/afc.jpg') {
-    landmarkImage = require('../assets/afc.jpg')
-  } else if (landmarkImage === '../assets/poe.jpg') {
-    landmarkImage = require('../assets/poe.jpg')
-  } else if (landmarkImage === '../assets/rotunda.jpg') {
-    landmarkImage = require('../assets/rotunda.jpg')
-  } else if (landmarkImage === '../assets/bodos.jpg') {
-    landmarkImage = require('../assets/bodos.jpg')
+  image_name = props.navigation.getParam('landmarkImage');
+  root = "https://simple-express-app.herokuapp.com/assets/"
+  landmarkImage = {
+    uri: root + image_name,
   }
+  console.log(landmarkImage)
+
   titleText = props.navigation.getParam('titleText');
   descriptionText = props.navigation.getParam('descriptionText');
   let coord = {...props.navigation.getParam('landmarkCoordinate')};
