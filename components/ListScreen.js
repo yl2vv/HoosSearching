@@ -108,23 +108,30 @@ export default class ListScreen extends React.Component {
         });
       }
     );
-    fetch("http://google.com/")
-    .then((response) => response)
-    .then((responseJson) => {
-      console.log("setting temp!")
-      this.setState({
-        temp: 90,
-        weather: "hot!",
-      });
-    })
-    // fetch(web_url)
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //     this.setState({
-    //       temp: responseJson.main.temp,
-    //       weather: responseJson.weather[0].description,
-    //     });
+    // fetch("http://google.com/")
+    // .then((response) => response)
+    // .then((responseJson) => {
+    //   console.log("setting temp!")
+    //   this.setState({
+    //     temp: 90,
+    //     weather: "hot!",
+    //   });
     // })
+    fetch(web_url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          temp: responseJson.main.temp,
+          weather: responseJson.weather[0].description,
+        });
+      })
+      .catch(() => {
+        console.log("Error getting weather data.")
+        this.setState({
+          temp: "44.58F",
+          weather: "clear sky",
+        });
+      })
   }
 
   get_found_landmarks = async () => {
@@ -194,7 +201,7 @@ const styles = {
     paddingLeft: "10%",
     paddingRight: "10%",
     borderColor: "red",
-    borderWidth: "0%"
+    borderWidth: 0
   },
   item: {
     flexDirection: "row",
