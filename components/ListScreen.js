@@ -72,7 +72,7 @@ export default class ListScreen extends React.Component {
     let places = [];
     this.get_found_landmarks()
       .then((found_places) => {
-        dbh.collection("landmarks_auto").get()
+        dbh.collection("landmarks_auto2").get()
           .then((querySnapshot) => {
             querySnapshot.forEach(function (doc) {
               let data = doc.data();
