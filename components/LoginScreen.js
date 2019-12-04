@@ -2,6 +2,8 @@ import * as React from "react";
 import {Button, Text, View, Alert, Dimensions, Image, TouchableOpacity} from "react-native";
 import * as firebase from 'firebase';
 import * as Facebook from 'expo-facebook';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
   authDomain: "hoosearching.firebaseapp.com",

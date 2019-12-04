@@ -4,15 +4,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from 'firebase'
 import '@firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
-  authDomain: "hoosearching.firebaseapp.com",
-  databaseURL: "https://hoosearching.firebaseio.com",
-  projectId: "hoosearching",
-  storageBucket: "hoosearching.appspot.com",
-  messagingSenderId: "27080950881",
-  appId: "1:27080950881:web:c3b17e9223197fe5ea9620"
-};
 
 state = {
   weather: "",
