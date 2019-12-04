@@ -98,7 +98,6 @@ export default class ListScreen extends React.Component {
         return this.get_found_landmarks()
       })
       .then((found_places) => {
-        console.log(found_places)
         let places = this.state.places.map((el) => {
           if (found_places.includes(el.name)) {
             el.found = true
@@ -107,14 +106,23 @@ export default class ListScreen extends React.Component {
         });
         this.setState({places: places});
       });
-    fetch(web_url)
-      .then((response) => response.json())
+    fetch("http://google.com/")
+      .then((response) => response)
       .then((responseJson) => {
-      this.setState({ 
-        temp: responseJson.main.temp,
-        weather: responseJson.weather[0].description,
-      });
+        console.log("setting temp!")
+        this.setState({ 
+          temp: 90,
+          weather: "hot!",
+        });
     })
+    // fetch(web_url)
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     this.setState({ 
+    //       temp: responseJson.main.temp,
+    //       weather: responseJson.weather[0].description,
+    //     });
+    // })
   }
 
   componentDidMount() {
