@@ -215,6 +215,7 @@ const styles = {
     paddingLeft: 10,
     paddingRight: 10,
     border: 50,
+    flexWrap: "wrap"
   },
   image: {
     width: 30,
@@ -236,11 +237,13 @@ const styles = {
     fontSize: 28,
     color: "#6495ed",
     fontWeight: 'bold',
+    flex: 0.9
   },
   namefound: {
     fontSize: 28,
     color: "#6495ed",
     fontWeight: 'bold',
     opacity: 0.4,
+    flex: 0.9
   }
 };
