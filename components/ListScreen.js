@@ -124,7 +124,7 @@ export default class ListScreen extends React.Component {
     .then((response) => response)
     .then((responseJson) => {
       console.log("setting temp!")
-      this.setState({ 
+      this.setState({
         temp: 90,
         weather: "hot!",
       });
@@ -132,7 +132,7 @@ export default class ListScreen extends React.Component {
     // fetch(web_url)
     //   .then((response) => response.json())
     //   .then((responseJson) => {
-    //     this.setState({ 
+    //     this.setState({
     //       temp: responseJson.main.temp,
     //       weather: responseJson.weather[0].description,
     //     });
@@ -201,9 +201,12 @@ const styles = {
   },
   scroll: {
     flex: 1,
-    width: "80%",
+    width: "100%",
     height: "50%",
-    border: 20,
+    paddingLeft: "10%",
+    paddingRight: "10%",
+    borderColor: "red",
+    borderWidth: "0%"
   },
   item: {
     flexDirection: "row",
@@ -230,7 +233,6 @@ const styles = {
     alignItems: "flex-end",
   },
   temp: {
-    fontSize: 16,
     color: "#6495ed",
   },
   name: {
