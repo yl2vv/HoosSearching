@@ -1,33 +1,44 @@
 import React, {useEffect} from "react";
 import {Button, Image, Text, View, Dimensions, ScrollView} from "react-native";
 import MapView from 'react-native-maps';
+import firebase from 'firebase'
+import '@firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCs29Ez0H5DZBp_1SJ7K_ztPjpnI5wPLH0",
+  authDomain: "hoosearching.firebaseapp.com",
+  databaseURL: "https://hoosearching.firebaseio.com",
+  projectId: "hoosearching",
+  storageBucket: "hoosearching.appspot.com",
+  messagingSenderId: "27080950881",
+  appId: "1:27080950881:web:c3b17e9223197fe5ea9620"
+};
 
 export default function MapScreen(props) {
-  image_name = props.navigation.getParam('landmarkImage');
-  root = "https://simple-express-app.herokuapp.com/assets/"
-  landmarkImage = {
+  let image_name = props.navigation.getParam('landmarkImage');
+  let root = "https://simple-express-app.herokuapp.com/assets/"
+  let landmarkImage = {
     uri: root + image_name,
-  }
-  console.log(landmarkImage)
+  };
 
-  titleText = props.navigation.getParam('titleText');
-  descriptionText = props.navigation.getParam('descriptionText');
+  let titleText = props.navigation.getParam('titleText');
+  let descriptionText = props.navigation.getParam('descriptionText');
   let coord = {...props.navigation.getParam('landmarkCoordinate')};
-  landmarkCoordinate = {
+  let landmarkCoordinate = {
     latitude: coord['_lat'],
     longitude: coord['_long'],
     latitudeDelta: .01,
     longitudeDelta: .01
   };
-  mapInitialRegion = landmarkCoordinate;
-  
+  const dbh = firebase.firestore();
+
   return (
     <View>
       <ScrollView contentContainerStyle={{alignItems: "center"}}>
         <Image style={styles.image} source={landmarkImage}/>
         <MapView
           style={styles.mapStyle}
-          initialRegion={mapInitialRegion}
+          initialRegion={landmarkCoordinate}
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
@@ -46,7 +57,18 @@ export default function MapScreen(props) {
         <View style={styles.markFound}>
           <Button
             title="Mark found"
-            onPress={() => props.navigation.goBack()}
+            onPress={() => {
+              userId = firebase.auth().currentUser.uid;
+              userData =  dbh.collection("users").doc(userId);
+              userData.get().then((querySnapshot) => {
+                landmarks_found = querySnapshot.data().landmarks_found;
+                landmarks_found.push(titleText);
+                userData.update({
+                  landmarks_found: landmarks_found
+                });
+              });
+              props.navigation.goBack();
+            }}
           />
         </View>
       </ScrollView>
