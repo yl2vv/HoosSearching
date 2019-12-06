@@ -151,12 +151,10 @@ export default class ListScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{flexDirection: "row", paddingLeft: 90, paddingRight: 80}}>
-          <Text>Logged in as {firebase.auth().currentUser.displayName}</Text>
-          <View style={styles.top}>
-            <Text style={styles.temp}>{this.state.temp}° F</Text>
-            <Text style={styles.temp}>{this.state.weather}</Text>
-          </View>
+        <Text style={styles.user_text}>Get searching {firebase.auth().currentUser.displayName}!</Text>
+        <View style={styles.top}>
+          <Text style={styles.temp}>{this.state.temp}° F</Text>
+          <Text style={styles.temp}>{this.state.weather}</Text>
         </View>
          <FlatList
             data={this.state.places}
@@ -185,6 +183,9 @@ const styles = {
     alignItems: 'center', 
     justifyContent: 'center',
     backgroundColor: "#f0ffff"
+  },
+  user_text: {
+    marginTop: 10
   },
   title: {
     fontSize: 45,
